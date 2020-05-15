@@ -1,0 +1,19 @@
+class NewEmployee:
+    def __init__(self, first_name, last_name, position, municipality):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.position = position
+        self.municipality = municipality
+        self.email = first_name + last_name + municipality + "kommune.no"
+
+    def PrintEmployee(self):
+        print(
+              f"Er dette riktig?\n"
+              f"Fornavn: {self.first_name}\n"
+              f"Etternavn: {self.last_name}\n"
+              f"Position: {self.position}\n"
+              f"Email: {self.email}"
+              )
+
+e = NewEmployee("Are", "Olsen", "Apprentice", "Lindesnes")
+e.PrintEmployee()
