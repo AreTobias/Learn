@@ -2,39 +2,13 @@ from tkinter import *
 from PIL import ImageTk, Image
 import sqlite3
 
+# Datbase som brukes
+DATABASE = "bruker"
+
 root = Tk()
 root.geometry("600x600")
 root.title("Ny brukerskjema")
-root.iconbitmap('C:/Users/are0906/Downloads/logo300ddv.png')
-
-# Databases
-
-# Create a database / connect to one
-conn = sqlite3.connect('ny_bruker.db')
-
-# Create curson
-c = conn.cursor()
-
-# Create Table
-#c.execute("""CREATE TABLE ny_bruker_ (
-#
-#        f_navn text,
-#        m_navn text,
-#        e_navn text,
-#        kommune text,
-#        avdeling text,
-#        tittel text,
-#        mobilnummer integer,
-#        fodselsnummer integer
-#
-#        )""")
-
-
-# Commit changes
-conn.commit()
-
-# Close connection
-conn.close()
+#root.iconbitmap('C:/Users/are0906/Downloads/logo300ddv.png')
 
 
 # Create boxes
@@ -91,29 +65,31 @@ fodselsdato_label.grid(row=7, column=0)
 
 
 
-
 # Knapper
 
 def registrer():
 
 
     # Create a database / connect to one
-    conn = sqlite3.connect('ny_bruker.db')
+    conn = sqlite3.connect(f'{DATABASE}.db')
 
     # Create curson
     c = conn.cursor()
 
+    e_temp = f"{f_navn.get()}.{m_navn.get()}.{e_navn.get()}@{kommune.get()}.no" if m_navn.get() else f"{f_navn.get()}.{e_navn.get()}@{kommune.get()}.no"
+
     #insert into table
-    c.execute("INSERT INTO ny_bruker VALUES (:f_navn, :m_navn, :e_navn, :kommune, :avdeling, :stilling, :tlf_nummer, :fodselsdato)",
+    c.execute("INSERT INTO ny_bruker VALUES (:f_navn, :m_navn, :e_navn, :kommune, :e_post, :avdeling, :stilling, :fodselsdato, :tlf_nummer)",
         {
             'f_navn': f_navn.get(),
             "m_navn": m_navn.get(),
             "e_navn": e_navn.get(),
             "kommune": kommune.get(),
+            "e_post": e_temp,
             "avdeling": avdeling.get(),
             "stilling": stilling.get(),
-            "tlf_nummer": tlf_nummer.get(),
-            "fodselsdato": fodselsdato.get()
+            "fodselsdato": fodselsdato.get(),
+            "tlf_nummer": tlf_nummer.get()
         }
 
               )
@@ -135,13 +111,14 @@ def registrer():
 
 def sjekk_info():
     # Create a database / connect to one
-    conn = sqlite3.connect('ny_bruker.db')
+    conn = sqlite3.connect(f'{DATABASE}.db')
 
     # Create curson
     c = conn.cursor()
 
     # Sjekk info i DB
-    c.execute("SELECT *, oid FROM ny_bruker")
+    c.execute("SELECT * FROM ny_bruker")
+    
     informasjon = c.fetchall()
     print(informasjon)
 
